@@ -18,10 +18,11 @@ ENV NODE_ENV=production
 # Run the build script to compile the React frontend
 RUN npm run build
 
+COPY /var/task/.next/standalone ./
+
 EXPOSE 8080
 
 ENV PORT 8080
-ENV NPM_CONFIG_CACHE /tmp/.npm
 
 # Run `npm start` when the container starts
-ENTRYPOINT ["npm", "start"]
+CMD ["node", "server.js"]
