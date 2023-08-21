@@ -7,34 +7,20 @@ COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 /lambda-adapter /opt
 # Set the working directory inside the container
 WORKDIR /var/task
 
-# Install dependencies based on the preferred package manager
+COPY . ${LAMBDA_TASK_ROOT}
+
+# Install only production dependencies
 RUN npm ci
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED 1
-RUN yarn build
+# Set Node.js to production environment
+ENV NODE_ENV=production
 
-# If using npm comment out above and use below instead
-# RUN npm run build
+# Run the build script to compile the React frontend
+RUN npm run build
 
-# Production image, copy all the files and run next
-ENV NODE_ENV production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED 1
+EXPOSE 8080
 
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+ENV PORT 8080
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY /var/task/.next/standalone ./
-
-USER nextjs
-
-EXPOSE 8081
-
-ENV PORT 8081
-
-CMD ["node", "server.js"]
+# Run `npm start` when the container starts
+ENTRYPOINT ["npm", "start"]

@@ -35,5 +35,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 
 #
 docker build  --no-cache -t finanzas-personales .
-docker run -p 3000:3000 nextjs-docker.
+docker run -p 8080:8080 finanzas-personales
 docker container stop finanzas-personales
