@@ -18,7 +18,7 @@ ENV NODE_ENV=production
 # Run the build script to compile the React frontend
 RUN npm run build
 
-RUN mv .next /tmp/.next && rm -r * && mv /tmp/.next . && cp -r .next/standalone/ .
+RUN mv .next /tmp/.next && rm -r * && mv /tmp/.next .
 RUN ls -a
 EXPOSE 8080
 
