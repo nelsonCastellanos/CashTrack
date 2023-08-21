@@ -21,6 +21,7 @@ RUN npm run build
 EXPOSE 8080
 
 ENV PORT 8080
+ENV NPM_CONFIG_CACHE /tmp/.npm
 
 # Run `npm start` when the container starts
 ENTRYPOINT ["npm", "start"]
