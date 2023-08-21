@@ -16,7 +16,7 @@ RUN npm ci
 ENV NODE_ENV=production
 
 # Run the build script to compile the React frontend
-RUN npm run build && cp /var/task/.next/standalone .
+RUN npm run build && cp /var/task/.next/standalone/ .
 
 EXPOSE 8080
 
