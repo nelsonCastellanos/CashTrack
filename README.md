@@ -34,6 +34,6 @@ The easiest way to deploy your Next.js app is to use the [Vercel Platform](https
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
 
 #
-docker build -t finanzas-personales .
+docker build  --no-cache -t finanzas-personales .
 docker run -p 3000:3000 nextjs-docker.
 docker container stop finanzas-personales
