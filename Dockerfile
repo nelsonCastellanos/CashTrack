@@ -25,4 +25,4 @@ EXPOSE 8080
 ENV PORT 8080
 
 # Run `npm start` when the container starts
-CMD ["node", "server.js"]
+ENTRYPOINT ["node", "server.js"]
