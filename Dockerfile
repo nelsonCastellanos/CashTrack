@@ -1,28 +1,18 @@
-# Use an official Node.js image as the base image
-FROM public.ecr.aws/lambda/nodejs:18.2023.08.02.09
+FROM public.ecr.aws/docker/library/node:18.2023.08.02.09 as builder
+WORKDIR /app
+COPY . .
+RUN npm ci && npm run build
 
-# https://github.com/awslabs/aws-lambda-web-adapter
+FROM public.ecr.aws/docker/library/node:16.16.0-slim as runner
 COPY --from=public.ecr.aws/awsguru/aws-lambda-adapter:0.7.0 /lambda-adapter /opt/extensions/lambda-adapter
+ENV PORT=3000 NODE_ENV=production NPM_CONFIG_CACHE=/tmp/.npm
+ENV AWS_LWA_ENABLE_COMPRESSION=true
+WORKDIR /app
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+COPY --from=builder /app/run.sh ./run.sh
+RUN ln -s /tmp/cache ./.next/cache
 
-# Set the working directory inside the container
-WORKDIR /var/task
-
-COPY . ${LAMBDA_TASK_ROOT}
-
-# Install only production dependencies
-RUN npm ci
-
-# Set Node.js to production environment
-ENV NODE_ENV=production
-
-# Run the build script to compile the React frontend
-RUN npm run build
-
-RUN mv .next /tmp/.next && rm -r * && mv /tmp/.next . && cp -r .next/standalone/* .
-EXPOSE 8080
-
-ENV PORT 8080
-ENV NPM_CONFIG_CACHE /tmp/.npm
-
-# Run `npm start` when the container starts
 ENTRYPOINT ["node", "server.js"]
