@@ -1,0 +1,21 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Cash Track API",
+    "version": "1.0"
+  },
+  "paths": {
+    "/api/expense": {
+      "post": {
+        "description": "Create expenses values",
+        "responses": {
+          "200": {
+            "description": "Hello World!"
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}
