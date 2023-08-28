@@ -1,27 +1,26 @@
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider          = "postgresql"
+  url               = env("DATABASE_URL")
   shadowDatabaseUrl = env("SHADOW_DATABASE_URL") // Only needed when using a cloud provider that doesn't support the creation of new databases, like Heroku. Learn more: https://pris.ly/d/migrate-shadow
 }
 
 generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["referentialActions"] // You won't need this in Prisma 3.X or higher.
+  provider = "prisma-client-js"
 }
 
 model Account {
-  id                 String  @id @default(cuid())
-  userId             String
-  type               String
-  provider           String
-  providerAccountId  String
-  refresh_token      String?  @db.Text
-  access_token       String?  @db.Text
-  expires_at         Int?
-  token_type         String?
-  scope              String?
-  id_token           String?  @db.Text
-  session_state      String?
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
@@ -44,6 +43,7 @@ model User {
   image         String?
   accounts      Account[]
   sessions      Session[]
+  Expense       Expense[]
 }
 
 model VerificationToken {
@@ -52,4 +52,65 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model IdentifyType {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  expenses    Expense[]
+
+  @@unique([name])
+}
+
+model ExpenseCategory {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  expenses    Expense[]
+
+  @@unique([name])
+}
+
+model ExpenseProducts {
+  id                Int     @id @default(autoincrement())
+  name              String
+  description       String?
+  quantity          Float?
+  price             Float?
+  expenses          Expense @relation(fields: [expenseExpense_id], references: [expense_id])
+  expenseExpense_id Int
+}
+
+model ExpenseTags {
+  id          Int       @id @default(autoincrement())
+  name        String
+  description String?
+  expenses    Expense[]
+}
+
+model Files {
+  id                Int     @id @default(autoincrement())
+  name              String
+  description       String?
+  path              String?
+  Expenses          Expense @relation(fields: [expenseExpense_id], references: [expense_id])
+  expenseExpense_id Int
+}
+
+model Expense {
+  expense_id     Int               @id @default(autoincrement())
+  identifyNumber String?
+  identifyIdType Int
+  identifyType   IdentifyType      @relation(fields: [identifyIdType], references: [id])
+  description    String?
+  price          Float?
+  date           DateTime?
+  categoryId     Int
+  category       ExpenseCategory   @relation(fields: [categoryId], references: [id])
+  products       ExpenseProducts[]
+  tags           ExpenseTags[]
+  files          Files[]
+  userId         String
+  user           User              @relation(fields: [userId], references: [id])
 }
