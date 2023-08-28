@@ -37,3 +37,7 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/deploym
 docker build  --no-cache -t finanzas-personales .
 docker run -p 8080:8080 finanzas-personales
 docker container stop finanzas-personales
+
+# database
+npx prisma migrate dev
+
