@@ -1,7 +1,6 @@
 import {PrismaClient} from "@prisma/client";
 import {NextResponse} from "next/server";
 import {z} from "zod";
-import {getToken} from "next-auth/jwt";
 import {getServerSession} from "next-auth";
 import {authOptions} from "@/pages/api/auth/[...nextauth]";
 
@@ -34,11 +33,40 @@ const schema = z.object({
 })
 
 
+/**
+ * @swagger
+ * api/expense:
+ *  get:
+ *  description: Get all expenses
+ *  responses:
+ *    200:
+ *    description: Expenses
+ *    content:
+ *    application/json:
+ *    schema:
+ *    type: object
+ *    properties:
+ *    data:
+ *    type: array
+ *    items:
+ *    $ref: '#/components/schemas/Expense'
+ */
 export async function GET(request: Request) {
+    const session = await getServerSession(authOptions)
+    console.log(session)
     const data = await prisma.expense.findMany()
     NextResponse.json({ data })
 }
 
+/**
+ * @swagger
+ * /api/expense:
+ *   post:
+ *     description: Create expenses values
+ *     responses:
+ *       200:
+ *         description: Hello World!
+ */
 export async function POST(request: Request) {
     const session = await getServerSession(authOptions)
     const email = session?.user?.email;
