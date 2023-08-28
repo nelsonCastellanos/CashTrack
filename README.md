@@ -2,8 +2,12 @@ La idea de este proyecto es llevar las finanzas personales de una manera mas ord
 
 ## Getting Started
 
-First, run the development server:
+Initialize the database:
+```bash
+ docker compose up -d
+```
 
+First, run the development server:
 ```bash
 npm run dev
 # or
