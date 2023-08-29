@@ -50,6 +50,12 @@ Generate migration
 npx prisma migrate dev
 ```
 
+Seed database
+```bash
+npx prisma db seed
+```
+
+
 # Generate docs
 ```bash
 yarn next-swagger-doc-cli next-swagger-doc.json

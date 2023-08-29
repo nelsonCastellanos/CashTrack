@@ -116,5 +116,5 @@ export async function POST(request: NextRequest) {
             }))
         });
     }
-    NextResponse.json({ expense })
+    return NextResponse.json({ expense })
 }

@@ -1,16 +1,22 @@
 import {SessionProvider, useSession} from "next-auth/react";
+import ThemeRegistry from "../app/ThemeRegistry";
+import Container from "@mui/material/Container";
 
 export default function App({Component, pageProps: { session, ...pageProps }}) {
     return (
-        <SessionProvider session={session}>
-            {Component.auth ? (
-                <Auth>
-                    <Component {...pageProps} />
-                </Auth>
-            ) : (
-                <Component {...pageProps} />
-            )}
-        </SessionProvider>
+        <ThemeRegistry options={{ key: 'mui' }}>
+            <Container fixed>
+                <SessionProvider session={session}>
+                    {Component.auth ? (
+                        <Auth>
+                            <Component {...pageProps} />
+                        </Auth>
+                    ) : (
+                        <Component {...pageProps} />
+                    )}
+                </SessionProvider>
+            </Container>
+        </ThemeRegistry>
     )
 }
 
