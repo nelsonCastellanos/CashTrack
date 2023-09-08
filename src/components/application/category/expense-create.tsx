@@ -5,6 +5,8 @@ import {TextInput} from "@/components/form/text-input";
 import {TextAreaInput} from "@/components/form/text-area-input";
 import Button from "@mui/material/Button";
 import Box from "@mui/material/Box";
+import {POST} from "@/utils/request";
+import {SERVICES_PATH} from "@/constants/http-request";
 
 export default function Create(props: { onCreated: (arg0: any) => void; }){
     const [category, setCategory] = React.useState<{
@@ -15,19 +17,11 @@ export default function Create(props: { onCreated: (arg0: any) => void; }){
 
 
     function handlerSubmit(vent: { preventDefault: () => void; }) {
-        // create fetch post in js
-        fetch('/api/category', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(category),
-        })
-            .then(response => response.json())
-            .then(data => {
-                props.onCreated(data);
-            });
+        POST(SERVICES_PATH.CATEGORY.POST, category).then(response => {
+            if (response.code === 200) {
+                props.onCreated(response.message)
+            }
+        });
         vent.preventDefault();
     }
 
@@ -44,7 +38,7 @@ export default function Create(props: { onCreated: (arg0: any) => void; }){
                     </Typography>
                 </Grid>
                 <Grid xs={12}>
-                    <TextInput label={"Nombre"} propsTextFields={{required: true}} getValue={handlerName}/>
+                    <TextInput label={"Nombre"} props={{required: true}} onChange={handlerName}/>
                 </Grid>
                 <Grid xs={12}>
                     <TextAreaInput placeholder={"Descripción"}/>

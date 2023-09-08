@@ -1,8 +1,8 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import {useEffect} from "react";
 
 const style = {
     position: 'absolute' as 'absolute',
@@ -34,7 +34,7 @@ export default function BasicModal(props: { children: React.ReactElement; button
 
     return (
         <>
-            <Button onClick={handleOpen} variant={"contained"}>
+            <Button onClick={handleOpen} variant={"outlined"}>
                 {props.button}
             </Button>
             <Modal open={open} onClose={handleClose}>

@@ -1,5 +1,6 @@
 import {useEffect, useState} from "react";
 import SelectInput from "@/components/form/select-input";
+import {ProgressBar} from "@/components/form/progress-bar";
 
 export default function IdentifyType() {
     const [data, setData] = useState<Array<{
@@ -19,7 +20,7 @@ export default function IdentifyType() {
             })
     }, [])
 
-    if (isLoading) return <p>Loading...</p>
+    if (isLoading) return <ProgressBar/>
     if (!data) return <p>No profile data</p>
 
     return (

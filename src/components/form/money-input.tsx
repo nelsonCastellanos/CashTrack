@@ -1,13 +1,23 @@
 import React from "react";
-import { NumericFormat, NumericFormatProps } from 'react-number-format';
+import {NumericFormat, NumericFormatProps} from 'react-number-format';
 import TextField from '@mui/material/TextField';
 
 interface MoneyInputProps {
     label: string;
+    onChange?: (value: number) => void;
+    value?: number;
+}
+
+interface NumberOnChange {
+    target: {
+        name: string;
+        value: string;
+        floatValue: number | undefined
+    }
 }
 
 interface CustomProps {
-    onChange: (event: { target: { name: string; value: string } }) => void;
+    onChange: (event: NumberOnChange) => void;
     name: string;
 }
 
@@ -19,11 +29,12 @@ const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
             <NumericFormat
                 {...other}
                 getInputRef={ref}
-                onValueChange={(values: { value: any; }) => {
+                onValueChange={(values) => {
                     onChange({
                         target: {
                             name: props.name,
                             value: values.value,
+                            floatValue: values.floatValue
                         },
                     });
                 }}
@@ -39,7 +50,8 @@ const NumericFormatCustom = React.forwardRef<NumericFormatProps, CustomProps>(
 export function MoneyInput(props: MoneyInputProps) {
 
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(event.target.value)
+        const formatEvent = event as unknown as NumberOnChange;
+        props.onChange && props.onChange(formatEvent.target.floatValue || 0);
     };
 
     return (
@@ -48,6 +60,7 @@ export function MoneyInput(props: MoneyInputProps) {
             onChange={handleChange}
             InputProps={{
                 inputComponent: NumericFormatCustom as any,
+                defaultValue: props.value
             }}
             fullWidth
         />
